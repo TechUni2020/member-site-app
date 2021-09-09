@@ -7,7 +7,6 @@ class AuthScreen extends StatefulWidget {
   static MaterialPageRoute get route => MaterialPageRoute(
         builder: (context) => const AuthScreen(),
       );
-
   @override
   _AuthScreenState createState() => _AuthScreenState();
 }
