@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:techuni/models/auth_model.dart';
-import 'package:techuni/screens/auth/auth.dart';
+import 'package:techuni/screens/auth/signin.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AuthScreen()),
+                      builder: (context) => SignIn()),
                   (_) => false));
             },
             child: Text('Signout',

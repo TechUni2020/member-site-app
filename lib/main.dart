@@ -1,7 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:techuni/root.dart';
-import 'package:techuni/screens/auth/auth.dart';
+import 'package:techuni/route.dart';
+import 'package:techuni/screens/auth/signin.dart';
+import 'package:techuni/screens/routes/root.dart';
 import 'package:provider/provider.dart';
 
 import 'models/auth_model.dart';
@@ -13,24 +14,18 @@ void main() async{
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home:  _LoginCheck(),
+    return ChangeNotifierProvider(
+      create: (context) => AuthModel(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+        ),
+        routes: AppRoutes.define(),
+        home: _LoginCheck(),
+      )
     );
   }
 }
@@ -43,6 +38,6 @@ class _LoginCheck extends StatelessWidget {
     final bool _loggedIn = context.watch<AuthModel>().loggedIn;
     return _loggedIn
         ? RootWidget()
-        : AuthScreen();
+        : SignIn();
   }
 }
