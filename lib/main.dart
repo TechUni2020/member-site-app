@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.green,
         ),
         routes: AppRoutes.define(),
-        home: _LoginCheck(),
+        // home: _LoginCheck(),
+        home: RootWidget(),
       )
     );
   }
