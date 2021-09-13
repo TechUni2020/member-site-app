@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:techuni/screens/routes/home.dart';
+import 'package:techuni/widgets/widget.dart';
 
 class RootWidget extends StatefulWidget {
   RootWidget({Key key}) : super(key: key);
@@ -76,6 +77,7 @@ class _RootWidgetState extends State<RootWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppbarMain(title: Text("ホーム画面"),  isAction: true,),
       body: _routes.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed, // これを書かないと3つまでしか表示されない
