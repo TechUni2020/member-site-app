@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.techuni">
+    package="net.shohi.member_site">
    <application
         android:label="techuni"
         android:icon="@mipmap/ic_launcher">
