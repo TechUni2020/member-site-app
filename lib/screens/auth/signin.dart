@@ -244,8 +244,17 @@ class _SignInViewState extends State<SignIn> {
     );
 
     return Scaffold(
-      backgroundColor: Const.utilColor["green"],
-      body: Form(
+      body:Stack(
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/sign in background.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+       Form(
         key: _formKey,
         child: SingleChildScrollView(
           padding: EdgeInsets.all(36),
@@ -264,6 +273,7 @@ class _SignInViewState extends State<SignIn> {
           ),
         ),
       ),
+      ])
     );
   }
 }
