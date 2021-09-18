@@ -33,36 +33,34 @@ class _SignInViewState extends State<SignIn> {
                 color: Colors.white,
                 child: Column(
                   children: <Widget>[
-                    Text("メールアドレスを入力してください"),
-                    TextField(
+                    Text("Please enter email address."),
+                    Padding(padding: EdgeInsets.only(top:20),
+                    child:TextField(
                       controller: _emailControllerField,
                       decoration: InputDecoration(
                         focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
-                            color: Colors.black,
+                            color: Const.utilColor["grey"],
                           ),
                         ),
-                        hintText: "something@example.com",
-                        labelText: "メールアドレス",
+                        labelText: "E-Mail",
                         labelStyle: TextStyle(
-                          color: Colors.black,
-                        ),
-                        hintStyle: TextStyle(
                           color: Colors.black,
                         ),
                       ),
                     ),
+                    ),
                     Padding(
-                      padding: EdgeInsets.all(15),
+                      padding: EdgeInsets.only(top:35),
                       child: Material(
                         elevation: 5.0,
                         borderRadius: BorderRadius.circular(25.0),
-                        color: Color(0xff8c52ff),
+                        color: Const.utilColor["grey"],
                         child: MaterialButton(
                           minWidth: mq.size.width / 2,
                           padding: EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
                           child: Text(
-                            "メールを送信",
+                            "Send a mail",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 20.0,
@@ -94,21 +92,17 @@ class _SignInViewState extends State<SignIn> {
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
       style: TextStyle(
-        color: Colors.white,
+        color: Const.utilColor["grey"],
       ),
-      cursorColor: Colors.white,
+      cursorColor: Const.utilColor["grey"],
       decoration: InputDecoration(
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.white,
           ),
         ),
-        hintText: "something@example.com",
-        labelText: "メールアドレス",
+        labelText: "E-Mail",
         labelStyle: TextStyle(
-          color: Colors.white,
-        ),
-        hintStyle: TextStyle(
           color: Colors.white,
         ),
       ),
@@ -120,21 +114,17 @@ class _SignInViewState extends State<SignIn> {
           obscureText: true,
           controller: _passwordController,
           style: TextStyle(
-            color: Colors.white,
+            color: Const.utilColor["grey"],
           ),
-          cursorColor: Colors.white,
+          cursorColor: Const.utilColor["grey"],
           decoration: InputDecoration(
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(
                 color: Colors.white,
               ),
             ),
-            hintText: "パスワード",
-            labelText: "パスワード",
+            labelText: "Password",
             labelStyle: TextStyle(
-              color: Colors.white,
-            ),
-            hintStyle: TextStyle(
               color: Colors.white,
             ),
           ),
@@ -147,7 +137,7 @@ class _SignInViewState extends State<SignIn> {
           children: <Widget>[
             MaterialButton(
                 child: Text(
-                  "パスワードを忘れましたか？",
+                  "Forgot Password？",
                   style: Theme.of(context)
                       .textTheme
                       .caption
@@ -162,7 +152,7 @@ class _SignInViewState extends State<SignIn> {
     );
 
     final fields = Padding(
-      padding: EdgeInsets.only(top: 10.0),
+      padding: EdgeInsets.only(top:300,bottom:50),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -180,11 +170,11 @@ class _SignInViewState extends State<SignIn> {
         minWidth: mq.size.width / 1.2,
         padding: EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
         child: Text(
-          "ログイン",
+          "Login",
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 20.0,
-            color: Colors.black,
+            color: Const.utilColor["grey"],
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -209,61 +199,34 @@ class _SignInViewState extends State<SignIn> {
       ),
     );
 
-    final bottom = Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        loginButton,
-        Padding(
-          padding: EdgeInsets.all(8.0),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(
-              "未登録ですか?",
-              style: Theme.of(context).textTheme.subtitle1.copyWith(
-                    color: Colors.white,
-                  ),
-            ),
-            MaterialButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(AppRoutes.authRegister);
-              },
-              child: Text(
-                "登録",
-                style: Theme.of(context).textTheme.subtitle1.copyWith(
-                      color: Colors.white,
-                      decoration: TextDecoration.underline,
-                    ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
 
     return Scaffold(
-      backgroundColor: Const.utilColor["green"],
-      body: Form(
+      body:Stack(
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/sign in background.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+       Form(
         key: _formKey,
         child: SingleChildScrollView(
           padding: EdgeInsets.all(36),
           child: Container(
             height: mq.size.height,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 fields,
-                Padding(
-                  padding: EdgeInsets.only(bottom: 50),
-                  child: bottom,
-                ),
+                loginButton
               ],
             ),
           ),
         ),
       ),
+      ])
     );
   }
 }
