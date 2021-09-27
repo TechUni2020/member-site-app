@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:techuni/screens/mypages/mypage.dart';
 import 'package:techuni/screens/routes/home.dart';
 import 'package:techuni/widgets/widget.dart';
 
@@ -33,7 +34,7 @@ class _RootWidgetState extends State<RootWidget> {
     HomePage(),
     HomePage(),
     HomePage(),
-    HomePage(),
+    mypage(),
   ];
 
   @override
