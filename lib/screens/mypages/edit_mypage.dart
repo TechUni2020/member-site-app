@@ -13,6 +13,9 @@ class _editpageState extends State<editpage> {
     super.initState();
   }
 
+  final mycontroller1 = TextEditingController();
+  final mycontroller2 = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,6 +60,7 @@ class _editpageState extends State<editpage> {
                     ),
                     Form(
                       child: TextFormField(
+                        controller: mycontroller1,
                         decoration: InputDecoration(labelText: 'ユーザーネーム'),
                       ),
                     ),
@@ -66,9 +70,19 @@ class _editpageState extends State<editpage> {
                     ),
                     Form(
                       child: TextFormField(
+                        controller: mycontroller2,
                         decoration: InputDecoration(labelText: 'メールアドレス'),
                       ),
                     ),
+                    RaisedButton(
+                        child: Text(
+                            "送信"
+                        ),
+                        onPressed: (){
+                          print(mycontroller1.text);
+                          print(mycontroller2.text);
+                        })
+
                   ],
                 ),
               ),
