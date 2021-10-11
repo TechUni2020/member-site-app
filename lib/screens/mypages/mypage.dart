@@ -4,10 +4,12 @@ import 'package:techuni/models/auth_model.dart';
 import 'package:techuni/screens/auth/signin.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart' as cloud_firestore;
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'edit_mypage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -23,10 +25,41 @@ Future<void> main() async {
 }
 
 class _mypageState extends State<mypage> {
-  _mypageState();
 
+  final user = _auth.currentUser;
+  var personalinformation = [];
+  final _firestore = FirebaseFirestore.instance;
+  void getMessages() async {
+    final messages = await _firestore.collection('user').doc(user.uid).get();
+    // for (var message in messages) {
+    personalinformation.add(messages.data()["department"]);
+    personalinformation.add(messages.data()["class"]);
+    personalinformation.add(messages.data()["grade"]);
+    personalinformation.add(messages.data()["hobby"]);
+    personalinformation.add(messages.data()["likefood"]);
+    personalinformation.add(messages.data()["dislikefood"]);
+    personalinformation.add(messages.data()["information"]);
+    // }
+  }
+  // var flg= "";
+  var flg = [];
+  void flgs() async {
+    final flgs = await _firestore.collection('user').doc(user.uid).get();
+    flg.add(flgs.data()["flg"]);
+    // for (var message in messages) {
+    // flg = flgs.data()["flg"];
+    // }
+  }
+  @override
+  void initState() {
+    super.initState();
+    getMessages();
+    flgs();
+  }
+  _mypageState();
   @override
   Widget build(BuildContext context) {
+
     // String helloWorld1(x){
     //   return x;
     // }
@@ -38,10 +71,88 @@ class _mypageState extends State<mypage> {
     String likefood = "バナナ";
     String dislikefood = "セロリ";
 
-    final user = _auth.currentUser;
-    print("//////////////////////////");
-    print(user);
-    print("//////////////////////////");
+    // print("//////////////////////////");
+    // print(user);
+    // print("//////////////////////////");
+
+    //////////////////////////////////////////////
+    List<DocumentSnapshot> documentList = [];
+    // 一覧取得
+    // final push = Center(
+    //   child: Column(
+    //     children: <Widget>[
+    //       ElevatedButton(
+    //         child: Text('ドキュメント一覧取得'),
+    //         onPressed: () async {
+    //           // コレクション内のドキュメント一覧を取得
+    //           final snapshot =
+    //           await FirebaseFirestore.instance.collection('user').get();
+    //           // 取得したドキュメント一覧をUIに反映
+    //           setState(() {
+    //             documentList = snapshot.documents;
+    //           });
+    //         },
+    //       ),
+    //       // コレクション内のドキュメント一覧を表示
+    //       Column(
+    //         children: documentList.map((document) {
+    //           return ListTile(
+    //             title: Text('${document['name']}さん'),
+    //             subtitle: Text('${document['age']}歳'),
+    //           );
+    //         }).toList(),
+    //       ),
+    //     ],
+    //   ),
+    // );
+    ///////////////////////////////////////////////
+    // 指定して取得
+    // String orderDocumentInfo = '';
+    // final push = ElevatedButton(
+    //   child: Text('ドキュメントを指定して取得'),
+    //   onPressed: () async {
+    //     // コレクションIDとドキュメントIDを指定して取得
+    //     final document = await FirebaseFirestore.instance
+    //         .collection('user')
+    //         .doc(user.uid)
+    //         .collection('information')
+    //         .doc('id_123')
+    //         .get();
+    //     // 取得したドキュメントの情報をUIに反映
+    //     setState(() {
+    //        orderDocumentInfo =
+    //       '${document['date']} ${document['price']}円';
+    //     });
+    //     ////////////////////zzzzzzzzzzzzz///////
+    //     print(orderDocumentInfo);
+    //     ////////////////////zzzzzzzzzzzzz///////
+    //   },
+    // );
+
+    print(personalinformation.length);
+    print(flg[0]);
+    ///////////////////////////////////////
+    // 新規登録
+    //
+    // final push =
+    // Center(
+    //   child: Column(
+    //     children: <Widget>[
+    //       // ElevatedButton(/* --- 省略 --- */),
+    //       ElevatedButton(
+    //         child: Text('サブコレクション＋ドキュメント作成'),
+    //         onPressed: () async {
+    //           // サブコレクション内にドキュメント作成
+    //           await FirebaseFirestore.instance
+    //               .collection('user')
+    //               .doc(user.uid)
+    //               .collection('information')
+    //               .doc('id_123')
+    //               .set({'price': 600, 'date': '9/13'});            },
+    //       ),
+    //     ],
+    //   ),
+    // );
 
     Future<void> instagramdialog(BuildContext context) async {
       //処理が重い(?)からか、非同期処理にする
@@ -74,6 +185,7 @@ class _mypageState extends State<mypage> {
             );
           });
     };
+
     Future<void> twitterdialog(BuildContext context) async {
       //処理が重い(?)からか、非同期処理にする
       return showDialog(
@@ -161,6 +273,8 @@ class _mypageState extends State<mypage> {
           )),
     );
 
+
+
     Widget maincard(String x, String y) {
       return Stack(
         children: <Widget>[
@@ -215,16 +329,106 @@ class _mypageState extends State<mypage> {
               },
               child: Opacity(
                 opacity: 0.5,
-                child: Icon(Icons.border_color // アイコンの色を設定できる
-                    ),
+                child: GestureDetector(
+                  onTap: () {
+                    // 処理を書く
+                  },
+                  child: Icon(Icons.border_color // アイコンの色を設定できる
+                      ),
+
+                ),
               ),
             ),
           ),
         ],
       );
-    }
+    };
 
-    ;
+    Widget editmaincard(String x) {
+      return Stack(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              //   border: Border.all(color: Colors.black),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            margin: EdgeInsets.only(
+              top: 0,
+              bottom: 10,
+              right: 5,
+              left: 5,
+            ),
+            child: Container(
+              padding: EdgeInsets.only(
+                top: 10,
+                bottom: 18,
+              ),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    child: Text(x),
+                    padding: EdgeInsets.all(
+                      (4),
+                    ),
+                  ),
+                  Container(
+                    height: 28,
+                    margin: EdgeInsets.only(
+                      top: 10, bottom: 0,
+                    ),
+                    padding: EdgeInsets.only(
+                      top: 0, bottom: 0,
+                    ),
+
+                    child:TextField(
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+      ),
+
+                    Container(
+                          height: 30,
+                          // width: 60,
+                          padding: EdgeInsets.only(
+                            top: 10, bottom: 0,
+                          ),
+
+                          child:Container(
+                            alignment: Alignment.bottomRight,
+                            child:FlatButton(
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              color: Colors.white,
+                              textColor: Colors.blue,
+                              child: Text('OK'),
+                              onPressed: () {
+                                //OKを押したあとの処理
+                              },
+
+                            ),
+
+                          ),
+
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+    };
+
+
+
+    // void _onPressed() {
+    //   var firebaseUser = FirebaseAuth.instance.currentUser;
+    //   firestoreInstance
+    //       .collection("users")
+    //       .doc(firebaseUser.uid)
+    //       .update({"age": 60}).then((_) {
+    //     print("success!");
+    //   });
+    // }
 
     final gathermaincard = Container(
       child: Container(
@@ -237,14 +441,14 @@ class _mypageState extends State<mypage> {
           },
           children: [
             TableRow(children: [
-              maincard("学部","経済学部"),
-              maincard("クラス","aa"),
-              maincard("学年","bbbbb"),
+              editmaincard("学部"),
+              maincard("クラス",personalinformation[1]),
+              maincard("学年",personalinformation[2]),
             ]),
             TableRow(children: [
-              maincard("趣味",""),
-              maincard("好きな食べ物","bbbbb"),
-              maincard("嫌いな食べも物","bbbbb"),
+              maincard("趣味",personalinformation[3]),
+              maincard("好きな食べ物",personalinformation[4]),
+              maincard("嫌いな食べも物",personalinformation[5]),
             ]),
           ],
         ),
@@ -278,7 +482,7 @@ class _mypageState extends State<mypage> {
             ),
             Container(
               child:Center(
-                child: Text("初めまして"),
+                child: Text(personalinformation[6]),
               ),
               constraints: BoxConstraints(
                 minHeight: 73.0,
@@ -310,6 +514,8 @@ class _mypageState extends State<mypage> {
           )),
           child: Column(
               children: <Widget>[
+                // push(),
+                // aaa,
                 Stack(
                   children: <Widget>[
                     instagram,
@@ -358,25 +564,25 @@ class _mypageState extends State<mypage> {
                     margin: EdgeInsets.only(
                      top: 5, right: 20,
                     ),
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: ElevatedButton(
-                        child: const Text('編集画面へ'),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.orange,
-                          onPrimary: Colors.white,
-                        ),
-                        onPressed: () {
-                          // （1） 指定した画面に遷移する
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  // （2） 実際に表示するページ(ウィジェット)を指定する
-                                  builder: (context) => editpage()));
-                        },
-                      ),
-                    )
-                )
+                    // child: Align(
+                    //   alignment: Alignment.bottomRight,
+                    //   child: ElevatedButton(
+                      //   child: const Text('編集画面へ'),
+                      //   style: ElevatedButton.styleFrom(
+                      //     primary: Colors.orange,
+                      //     onPrimary: Colors.white,
+                      //   ),
+                      //   onPressed: () {
+                      //     // （1） 指定した画面に遷移する
+                      //     Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //             // （2） 実際に表示するページ(ウィジェット)を指定する
+                      //             builder: (context) => editpage()));
+                      //   },
+                      // ),
+                    // )
+                ),
               ],
             ),
       )
