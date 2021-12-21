@@ -1,41 +1,40 @@
 {
   "project_info": {
-    "project_number": "758159769730",
-    "firebase_url": "https://member-site-2d26e-default-rtdb.firebaseio.com",
-    "project_id": "member-site-2d26e",
-    "storage_bucket": "member-site-2d26e.appspot.com"
+    "project_number": "1088198469972",
+    "project_id": "member-site-e9812",
+    "storage_bucket": "member-site-e9812.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:758159769730:android:f8c0320c7505ffe5f8349b",
+        "mobilesdk_app_id": "1:1088198469972:android:6bdb4d931d892ac8fbc0c1",
         "android_client_info": {
           "package_name": "net.shohi.member_site"
         }
       },
       "oauth_client": [
         {
-          "client_id": "758159769730-mefl2r43u9845vdu6085qpju4nd2h0jd.apps.googleusercontent.com",
+          "client_id": "1088198469972-4so6heh7tpcpe5ikricefoso50mvj6dp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAkPdpc50zmis8Q8p6RpqIA9ViMvRz1hO0"
+          "current_key": "AIzaSyCmQN3fSvNgCX_Y--iLCN4r_EQPfUfeLUg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "758159769730-mefl2r43u9845vdu6085qpju4nd2h0jd.apps.googleusercontent.com",
+              "client_id": "1088198469972-4so6heh7tpcpe5ikricefoso50mvj6dp.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "758159769730-e3nsh1fh17q2kkp3lpl6vge8l6ca1d4a.apps.googleusercontent.com",
+              "client_id": "1088198469972-rh7gp814vudjfd23gtu7bfb1jbhdlin7.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "net.shohi.memberSite"
+                "bundle_id": "net.shohi.member-site"
               }
             }
           ]

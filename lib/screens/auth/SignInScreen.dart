@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:techuni/utils/const.dart';
+import 'package:techuni/Constants/Constants.dart';
+import 'package:techuni/Models/FirebaseError.dart';
+import 'package:techuni/Services/AuthServices.dart';
+import 'package:techuni/Utils/Auth/FirebaseError.dart';
 import 'package:techuni/widgets/custom_alert_daialog.dart';
 
-import '../../route.dart';
-
-class SignIn extends StatefulWidget {
+class SignInScreen extends StatefulWidget {
   @override
-  _SignInViewState createState() => _SignInViewState();
+  _SignInScreenViewState createState() => _SignInScreenViewState();
 }
 
-class _SignInViewState extends State<SignIn> {
-  final _formKey = GlobalKey<FormState>();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+class _SignInScreenViewState extends State<SignInScreen> {
+  final GlobalKey<FormState> _signinKey = GlobalKey<FormState>();
+
+  String _email;
+  String _password;
+  bool _showPassword = false;
+  bool isSubmitting; //ローディング用
+  String errorMessage = "";
+
+  @override
+  void initState() {
+    isSubmitting = false;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,28 +44,29 @@ class _SignInViewState extends State<SignIn> {
                 child: Column(
                   children: <Widget>[
                     Text("Please enter email address."),
-                    Padding(padding: EdgeInsets.only(top:20),
-                    child:TextField(
-                      controller: _emailControllerField,
-                      decoration: InputDecoration(
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Const.utilColor["grey"],
+                    Padding(
+                      padding: EdgeInsets.only(top: 20),
+                      child: TextField(
+                        controller: _emailControllerField,
+                        decoration: InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Palette.utilColor["grey"],
+                            ),
                           ),
-                        ),
-                        labelText: "E-Mail",
-                        labelStyle: TextStyle(
-                          color: Colors.black,
+                          labelText: "E-Mail",
+                          labelStyle: TextStyle(
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
-                    ),
                     Padding(
-                      padding: EdgeInsets.only(top:35),
+                      padding: EdgeInsets.only(top: 35),
                       child: Material(
                         elevation: 5.0,
                         borderRadius: BorderRadius.circular(25.0),
-                        color: Const.utilColor["grey"],
+                        color: Palette.utilColor["grey"],
                         child: MaterialButton(
                           minWidth: mq.size.width / 2,
                           padding: EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
@@ -89,12 +100,25 @@ class _SignInViewState extends State<SignIn> {
     }
 
     final emailField = TextFormField(
-      controller: _emailController,
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'メールアドレスを入力してください';
+        } else if (errorMessage != 'パスワードが違います。' && errorMessage != '') {
+          return errorMessage;
+        }
+        return null;
+      },
+      onChanged: (value) {
+        _email = value;
+      },
+      onSaved: (value) => () {
+        _email = value;
+      },
       keyboardType: TextInputType.emailAddress,
       style: TextStyle(
-        color: Const.utilColor["grey"],
+        color: Palette.utilColor["grey"],
       ),
-      cursorColor: Const.utilColor["grey"],
+      cursorColor: Palette.utilColor["grey"],
       decoration: InputDecoration(
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
@@ -111,12 +135,20 @@ class _SignInViewState extends State<SignIn> {
     final passwordField = Column(
       children: <Widget>[
         TextFormField(
-          obscureText: true,
-          controller: _passwordController,
+          validator: (value) {
+            if (value.isEmpty) {
+              return 'パスワードを入力してください';
+            } else if (errorMessage == 'パスワードが違います。') {
+              print(errorMessage);
+              return errorMessage;
+            }
+            return null;
+          },
+          obscureText: !_showPassword,
           style: TextStyle(
-            color: Const.utilColor["grey"],
+            color: Palette.utilColor["grey"],
           ),
-          cursorColor: Const.utilColor["grey"],
+          cursorColor: Palette.utilColor["grey"],
           decoration: InputDecoration(
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(
@@ -127,7 +159,22 @@ class _SignInViewState extends State<SignIn> {
             labelStyle: TextStyle(
               color: Colors.white,
             ),
+            suffixIcon: IconButton(
+              icon:
+                  Icon(_showPassword ? Icons.visibility : Icons.visibility_off),
+              onPressed: () {
+                setState(() {
+                  _showPassword = !_showPassword;
+                });
+              },
+            ),
           ),
+          onChanged: (value) {
+            _password = value;
+          },
+          onSaved: (value) => () {
+            _password = value;
+          },
         ),
         Padding(
           padding: EdgeInsets.all(2.0),
@@ -152,7 +199,7 @@ class _SignInViewState extends State<SignIn> {
     );
 
     final fields = Padding(
-      padding: EdgeInsets.only(top:300,bottom:50),
+      padding: EdgeInsets.only(top: 300, bottom: 50),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -174,61 +221,56 @@ class _SignInViewState extends State<SignIn> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 20.0,
-            color: Const.utilColor["grey"],
+            color: Palette.utilColor["grey"],
             fontWeight: FontWeight.bold,
           ),
         ),
         onPressed: () async {
-          try {
-            User user =
-                (await FirebaseAuth.instance.signInWithEmailAndPassword(
-              email: _emailController.text,
-              password: _passwordController.text,
-            ))
-                    .user;
-            if (user != null) {
-              Navigator.of(context).pushNamed(AppRoutes.home);
+          setState(() {
+            isSubmitting = false;
+          });
+          errorMessage = '';
+          if (_signinKey.currentState.validate()) {
+            print("aaaaaa");
+            isSubmitting = true;
+            _signinKey.currentState.save();
+            final FirebaseAuthResultStatus signInResult =
+                await AuthService().login(_email, _password);
+            if (signInResult != FirebaseAuthResultStatus.Successful) {
+              setState(() {
+                errorMessage =
+                    FirebaseAuthExceptionHandler.exceptionMessage(signInResult);
+              });
+              _signinKey.currentState.validate();
+              isSubmitting = false;
             }
-          } catch (e) {
-            print(e);
-            _emailController.text = "";
-            _passwordController.text = "";
-            // TODO: AlertDialog with error
           }
         },
       ),
     );
 
-
     return Scaffold(
-      body:Stack(
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('images/sign in background.png'),
-              fit: BoxFit.cover,
-            ),
+        body: Stack(children: <Widget>[
+      Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/sign in background.png'),
+            fit: BoxFit.cover,
           ),
         ),
-       Form(
-        key: _formKey,
+      ),
+      Form(
+        key: _signinKey,
         child: SingleChildScrollView(
           padding: EdgeInsets.all(36),
           child: Container(
             height: mq.size.height,
             child: Column(
-              children: <Widget>[
-                fields,
-                loginButton
-              ],
+              children: <Widget>[fields, loginButton],
             ),
           ),
         ),
       ),
-      ])
-    );
+    ]));
   }
 }
-
-

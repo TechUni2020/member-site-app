@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../utils/const.dart';
-
+import 'package:techuni/Constants/Constants.dart';
 
 class AppbarMain extends StatelessWidget with PreferredSizeWidget {
   final Widget title;
@@ -17,7 +16,7 @@ class AppbarMain extends StatelessWidget with PreferredSizeWidget {
         'assets/logo.png', //Tech.Uniのアイコンとか入れて
         height: 200,
       ),
-        backgroundColor: Const.utilColor["green"],
+        backgroundColor: Palette.utilColor["green"],
         actions: isAction
             ? <Widget>[
                 Padding(
