@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
-  String id;
+  String? id;
   String name;
   String profilePicture;
   String bio;
@@ -11,7 +11,7 @@ class UserModel {
   String uid;
 
   UserModel(
-      {required this.id,
+      {this.id,
       required this.name,
       required this.profilePicture,
       required this.bio,
