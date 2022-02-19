@@ -1,44 +1,40 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:techuni/route.dart';
-import 'package:techuni/screens/auth/signin.dart';
-import 'package:techuni/screens/routes/root.dart';
+import 'package:techuni/Constants/Constants.dart';
+import 'package:techuni/Screens/FeedScreen.dart';
 import 'package:provider/provider.dart';
+import 'package:techuni/Screens/Welcome/WelcomeScreen.dart';
 
-import 'models/auth_model.dart';
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
 }
 
+// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
+  MyApp();
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AuthModel(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.green,
-        ),
-        routes: AppRoutes.define(),
-        // home: _LoginCheck(),
-        home: RootWidget(),
-      )
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: getScreenId(),
+      theme: ThemeData(
+        brightness: Brightness.light,
+      ),
     );
   }
-}
 
-class _LoginCheck extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // ログイン状態に応じて、画面を切り替える
-    //AuthModelで一括管理
-    final bool _loggedIn = context.watch<AuthModel>().loggedIn;
-    return _loggedIn
-        ? RootWidget()
-        : SignIn();
+  Widget getScreenId() {
+    return StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (BuildContext context, snapshot) {
+          if (snapshot.hasData) {
+            return FeedScreen(currentUserId: currentUserId, page: 0);
+          } else {
+            return FeedScreen(currentUserId: currentUserId, page: 0);
+          }
+        });
   }
 }
