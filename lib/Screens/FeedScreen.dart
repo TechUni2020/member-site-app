@@ -70,58 +70,70 @@ class _FeedScreenState extends State<FeedScreen> {
                       width: 75,
                       child: currentIndex == 0
                           ? Image.asset(
-                              'assets/NavigationBar/Hedgehog_unselected.png')
+                              'assets/bottombar/Hedgehog_selected.png')
                           : Image.asset(
-                              'assets/NavigationBar/Hedgehog_unselected.png'),
+                              'assets/bottombar/Hedgehog_unselected.png'),
                     ),
                     onPressed: () {
                       setBottomBarIndex(0);
                     },
-                    splashColor: Colors.white,
                   ),
                   IconButton(
-                      icon: Icon(
-                        Icons.search,
-                        color: currentIndex == 1
-                            ? Palette.red
-                            : Colors.grey.shade400,
-                      ),
-                      onPressed: () {
-                        setBottomBarIndex(1);
-                      }),
-                  Container(
-                    width: size.width * 0.20,
+                    icon: SizedBox(
+                      height: 75,
+                      width: 75,
+                      child: currentIndex == 1
+                          ? Image.asset(
+                              'assets/bottombar/Hedgehog_unselected.png')
+                          : Image.asset(
+                              'assets/bottombar/Hedgehog_unselected.png'),
+                    ),
+                    onPressed: () {
+                      setBottomBarIndex(1);
+                    },
                   ),
                   IconButton(
-                      icon: Icon(
-                        Icons.notifications,
-                        color: currentIndex == 2
-                            ? Palette.red
-                            : Colors.grey.shade400,
-                      ),
-                      onPressed: () {
-                        setBottomBarIndex(2);
-                      }),
+                    icon: SizedBox(
+                      height: 75,
+                      width: 75,
+                      child: currentIndex == 2
+                          ? Image.asset(
+                              'assets/bottombar/Hedgehog_unselected.png')
+                          : Image.asset(
+                              'assets/bottombar/Hedgehog_unselected.png'),
+                    ),
+                    onPressed: () {
+                      setBottomBarIndex(2);
+                    },
+                  ),
                   IconButton(
-                      icon: Icon(
-                        Icons.person,
-                        color: currentIndex == 3
-                            ? Palette.red
-                            : Colors.grey.shade400,
-                      ),
-                      onPressed: () {
-                        setBottomBarIndex(3);
-                      }),
+                    icon: SizedBox(
+                      height: 75,
+                      width: 75,
+                      child: currentIndex == 3
+                          ? Image.asset(
+                              'assets/bottombar/Hedgehog_unselected.png')
+                          : Image.asset(
+                              'assets/bottombar/Hedgehog_unselected.png'),
+                    ),
+                    onPressed: () {
+                      setBottomBarIndex(3);
+                    },
+                  ),
                   IconButton(
-                      icon: Icon(
-                        Icons.person,
-                        color: currentIndex == 4
-                            ? Palette.red
-                            : Colors.grey.shade400,
-                      ),
-                      onPressed: () {
-                        setBottomBarIndex(4);
-                      }),
+                    icon: SizedBox(
+                      height: 75,
+                      width: 75,
+                      child: currentIndex == 4
+                          ? Image.asset(
+                              'assets/bottombar/Hedgehog_unselected.png')
+                          : Image.asset(
+                              'assets/bottombar/Hedgehog_unselected.png'),
+                    ),
+                    onPressed: () {
+                      setBottomBarIndex(4);
+                    },
+                  ),
                 ],
               ),
             )));
