@@ -1,23 +1,42 @@
-import 'dart:io';
-import 'dart:ui' as ui;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:techuni/Screens/Welcome/StartProfileScreen.dart';
+import 'package:techuni/Services/AuthServices.dart';
 
-class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({
-    Key? key,
-  }) : super(key: key);
-  @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
-}
-
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Scaffold(
+      body: Container(
+        color: Colors.black,
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/welcome_background.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  await AuthService().signInAnonymous();
+                  Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => StartProfileScreen(),
+                      ));
+                },
+                child: Text(
+                  "はじめる",
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

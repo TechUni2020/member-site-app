@@ -14,7 +14,6 @@ void main() async {
 
 // ignore: must_be_immutable
 class MyApp extends StatelessWidget {
-  MyApp();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,7 +32,7 @@ class MyApp extends StatelessWidget {
           if (snapshot.hasData) {
             return FeedScreen(currentUserId: currentUserId, page: 0);
           } else {
-            return FeedScreen(currentUserId: currentUserId, page: 0);
+            return WelcomeScreen();
           }
         });
   }
