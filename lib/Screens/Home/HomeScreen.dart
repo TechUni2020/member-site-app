@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:techuni/Services/AuthServices.dart';
 
 class HomeScreen extends StatefulWidget {
   final String currentUserId;
@@ -14,7 +15,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Scaffold(
+      body: Container(
+          child: Center(
+        child: ElevatedButton(
+          onPressed: () async {
+            await AuthService().logout();
+          },
+          child: Text(
+            "ログアウト",
+          ),
+        ),
+      )),
+    );
   }
 }
