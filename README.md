@@ -8,6 +8,8 @@
 - [Flutter](https://flutter.dev/)
   - Flutter は Google 社が開発しているオープンソースのアプリケーションフレームワーク。
   - クロスプラットフォームに対応しており、ワンソースで複数のプラットフォーム（iOS、Android、Web、Windows、Mac、Linux）に対応したアプリを開発することができます。
+- [Firebase](https://firebase.google.com/docs)
+  - FireStore / CloudFunction / Storage / Remote Config  
 - [GitMoji](https://gitmoji.dev/) 😜
   - Commit メッセージに絵文字を使うことでパッと見で分かりやすくするものです。
 
@@ -27,10 +29,10 @@
 コマンドで行う場合
 
 ```
-git clone https://github.com/TechUni2020/Tech.Uni_Members.git
+git clone https://github.com/TechUni2020/member-site-app.git
 ```
 
-VS Code で行う場合は、リポジトリをクローンする（英語だと Clone Repository）というボタンがあるので、それをクリックしていただき、`https://github.com/TechUni2020/Tech.Uni_Members.git` を入力してエンターを押してください。
+VS Code で行う場合は、リポジトリをクローンする（英語だと Clone Repository）というボタンがあるので、それをクリックしていただき、`https://github.com/TechUni2020/member-site-app.git` を入力してエンターを押してください。
 
 
 ## 開発する
