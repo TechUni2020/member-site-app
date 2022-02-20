@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:techuni/Constants/Constants.dart';
 import 'package:techuni/Models/UserModel.dart';
+import 'package:techuni/Utils/Utils.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String currentUserId;
@@ -39,10 +40,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           UserModel userModel = UserModel.fromDoc(snapshot.data);
 
           return Scaffold(
-              body: ListView(padding: EdgeInsets.zero, children: <Widget>[
-            buildTop(userModel),
-            buildContent(userModel),
-          ]));
+              body: ListView(
+                  padding: EdgeInsets.zero,
+                  physics: BouncingScrollPhysics(),
+                  children: <Widget>[
+                buildTop(userModel),
+                buildContent(userModel),
+                const SizedBox(height: 16),
+                buildBio(userModel),
+              ]));
         });
   }
 
@@ -56,7 +62,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Container(
             margin: EdgeInsets.only(bottom: bottom),
             child: buildCoverImage(user)),
-        Positioned(top: top, child: buildProfileImage(user)),
+        Positioned(
+          top: top,
+          child: buildProfileImage(user),
+        ),
       ],
     );
   }
@@ -77,34 +86,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildSocialIcon(FontAwesomeIcons.github),
+              buildSocialIcon(FontAwesomeIcons.github,
+                  'https://github.com/shouhi/${user.githubId}'),
               const SizedBox(
                 width: 12,
               ),
-              buildSocialIcon(FontAwesomeIcons.twitter),
+              buildSocialIcon(FontAwesomeIcons.twitter,
+                  'https://twitter.com/${user.twitterId}'),
               const SizedBox(
                 width: 12,
               ),
-              buildSocialIcon(FontAwesomeIcons.instagram),
+              buildSocialIcon(FontAwesomeIcons.instagram,
+                  'https://www.instagram.com/${user.instagramId}'),
               const SizedBox(
                 width: 12,
               ),
             ],
           ),
           Divider(),
-          const SizedBox(height: 16),
-          buildBio(user),
         ],
       );
 
-  Widget buildSocialIcon(IconData icon) => CircleAvatar(
+  Widget buildSocialIcon(IconData icon, String url) => CircleAvatar(
         radius: 25,
         child: Material(
           shape: CircleBorder(),
           clipBehavior: Clip.hardEdge,
           color: Colors.transparent,
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Utils.launchURL(url);
+            },
             child: Center(
                 child: Icon(
               icon,
@@ -115,14 +127,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
 
   Widget buildBio(UserModel user) => Container(
+        padding: EdgeInsets.symmetric(horizontal: 48),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               '自己紹介',
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            Text(user.bio)
+            const SizedBox(height: 16),
+            Text(
+              user.bio,
+              style: TextStyle(fontSize: 16, height: 1.4),
+            ),
           ],
         ),
       );
