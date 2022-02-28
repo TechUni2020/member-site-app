@@ -1,13 +1,9 @@
-import 'dart:io';
-import 'dart:ui' as ui;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:techuni/Constants/Constants.dart';
 import 'package:techuni/Models/UserModel.dart';
+import 'package:techuni/Screens/Profile/EditProfileScreen.dart';
 import 'package:techuni/Utils/Utils.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -22,7 +18,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final double coverHeight = 280;
+  final double coverHeight = 200;
   final double profileHeight = 144;
 
   @override
@@ -38,7 +34,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             );
           }
           UserModel userModel = UserModel.fromDoc(snapshot.data);
-
           return Scaffold(
               body: ListView(
                   padding: EdgeInsets.zero,
@@ -79,25 +74,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Frontend Engineer',
+            user.knownAs,
             style: TextStyle(fontSize: 20, color: Colors.grey),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
+          widget.visitedUserId == widget.currentUserId
+              ? ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => EditProfileScreen(user: user),
+                        ));
+                  },
+                  child: Text(
+                    'Edit Profile',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  style: ButtonStyle(
+                    shadowColor: MaterialStateProperty.all(Colors.black),
+                    fixedSize: MaterialStateProperty.all(Size.fromWidth(300)),
+                    backgroundColor: MaterialStateProperty.all(Colors.white),
+                  ),
+                )
+              : const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildSocialIcon(FontAwesomeIcons.github,
-                  'https://github.com/shouhi/${user.githubId}'),
+              user.githubId!.isEmpty
+                  ? SizedBox()
+                  : buildSocialIcon(FontAwesomeIcons.github,
+                      'https://github.com/${user.githubId}'),
               const SizedBox(
                 width: 12,
               ),
-              buildSocialIcon(FontAwesomeIcons.twitter,
-                  'https://twitter.com/${user.twitterId}'),
+              user.twitterId!.isEmpty
+                  ? SizedBox()
+                  : buildSocialIcon(FontAwesomeIcons.twitter,
+                      'https://twitter.com/${user.twitterId}'),
               const SizedBox(
                 width: 12,
               ),
-              buildSocialIcon(FontAwesomeIcons.instagram,
-                  'https://www.instagram.com/${user.instagramId}'),
+              user.instagramId!.isEmpty
+                  ? SizedBox()
+                  : buildSocialIcon(FontAwesomeIcons.instagram,
+                      'https://www.instagram.com/${user.instagramId}'),
               const SizedBox(
                 width: 12,
               ),
@@ -145,8 +166,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
 
   Widget buildCoverImage(UserModel user) => Container(
-        color: Colors.grey,
-        width: double.infinity,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+          fit: BoxFit.fill,
+          image: user.coverPicture.isEmpty
+              ? AssetImage('assets/images/Profile_background.png')
+              : NetworkImage(user.profilePicture) as ImageProvider,
+        )),
         height: coverHeight,
       );
 
@@ -154,7 +180,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         radius: profileHeight / 2,
         backgroundColor: Colors.grey.shade800,
         backgroundImage: user.profilePicture.isEmpty
-            ? AssetImage('assets/placeholder.png')
+            ? AssetImage('assets/images/placeholder.png')
             : NetworkImage(user.profilePicture) as ImageProvider,
       );
 }
