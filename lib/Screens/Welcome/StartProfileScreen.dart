@@ -20,32 +20,11 @@ class _StartProfileScreenState extends State<StartProfileScreen> {
   final _globalkey = GlobalKey<FormState>();
   TextEditingController _name = TextEditingController();
   TextEditingController _bio = TextEditingController();
+  TextEditingController _knownAs = TextEditingController();
   TextEditingController _twitterId = TextEditingController();
   TextEditingController _githubId = TextEditingController();
   TextEditingController _instagramId = TextEditingController();
-  XFile? _profilePicture;
   late bool _isSubmitting;
-
-  displayProfileImage() {
-    // ignore: unnecessary_null_comparison
-    if (_profilePicture == null) {
-      return AssetImage('assets/images/placeholder.png');
-    } else {
-      return FileImage(File(_profilePicture!.path));
-    }
-  }
-
-  handleImageFromGallery() async {
-    try {
-      XFile imageFile = await ImagePicker()
-          .pickImage(source: ImageSource.gallery, imageQuality: 85) as XFile;
-      setState(() {
-        _profilePicture = imageFile;
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
 
   _submit() async {
     _globalkey.currentState!.save();
@@ -53,24 +32,18 @@ class _StartProfileScreenState extends State<StartProfileScreen> {
       setState(() {
         _isSubmitting = true;
       });
-      String profilePictureUrl = '';
-      // ignore: unnecessary_null_comparison
-      if (_profilePicture == null) {
-        profilePictureUrl = '';
-      } else {
-        profilePictureUrl =
-            await StorageService.uploadProfilePicture('', _profilePicture!);
-      }
       UserModel user = UserModel(
         name: _name.text,
-        profilePicture: profilePictureUrl,
+        profilePicture: '',
+        coverPicture: '',
         bio: _bio.text,
+        knownAs: _knownAs.text,
         uid: '',
         twitterId: _twitterId.text,
         githubId: _githubId.text,
         instagramId: _instagramId.text,
       );
-      await AuthService().createUserData(currentUserId, user);
+      await AuthService().signInAnonymous(user);
       _isSubmitting = false;
       Navigator.pop(context);
     }
@@ -97,10 +70,6 @@ class _StartProfileScreenState extends State<StartProfileScreen> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           children: <Widget>[
-            imageProfile(),
-            SizedBox(
-              height: 20,
-            ),
             nameTextField(),
             SizedBox(
               height: 20,
@@ -117,6 +86,10 @@ class _StartProfileScreenState extends State<StartProfileScreen> {
             SizedBox(
               height: 20,
             ),
+            knownAsField(),
+            SizedBox(
+              height: 20,
+            ),
             bioTextField(),
             SizedBox(
               height: 20,
@@ -130,47 +103,6 @@ class _StartProfileScreenState extends State<StartProfileScreen> {
         ),
       ),
     );
-  }
-
-  Widget imageProfile() {
-    return Center(
-        child: GestureDetector(
-      onTap: () {
-        handleImageFromGallery();
-      },
-      child: Stack(
-        children: [
-          CircleAvatar(
-            radius: 45,
-            backgroundImage: displayProfileImage(),
-          ),
-          CircleAvatar(
-            radius: 45,
-            backgroundColor: Colors.black54,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Icon(
-                  Icons.camera_alt,
-                  size: 30,
-                  color: Colors.white,
-                ),
-                Text(
-                  'プロフィール画像を\n編集',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 9,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-    ));
   }
 
   Widget nameTextField() {
@@ -269,6 +201,30 @@ class _StartProfileScreenState extends State<StartProfileScreen> {
         labelText: "instagramId",
         helperText: "Instagramアカウントをお持ちの方",
         hintText: "tech_uni1026",
+      ),
+    );
+  }
+
+  Widget knownAsField() {
+    return TextFormField(
+      controller: _knownAs,
+      validator: (value) {
+        if (value!.isEmpty) return "自分を表す一言を入力してください";
+        return null;
+      },
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+            borderSide: BorderSide(
+          color: Colors.teal,
+        )),
+        focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+          color: Colors.orange,
+          width: 2,
+        )),
+        labelText: "knownAs",
+        helperText: "自分を表す一言を記入してください",
+        hintText: "技術大好き人間",
       ),
     );
   }
