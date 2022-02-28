@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:techuni/Constants/Constants.dart';
 import 'package:techuni/Models/UserModel.dart';
 import 'package:techuni/Services/AuthServices.dart';
 import 'package:techuni/Services/StorageService.dart';
@@ -67,13 +68,15 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
       UserModel user = UserModel(
         name: _title.text,
         profilePicture: profilePictureUrl,
+        coverPicture: profilePictureUrl,
         bio: _about.text,
+        knownAs: '',
         uid: '',
         twitterId: _technology.text,
         githubId: _period.text,
         instagramId: _instagramId.text,
       );
-      // await AuthService().createUserData(currentUserId, user);
+      await AuthService().createUserData(currentUserId, user);
       _isSubmitting = false;
       Navigator.pop(context);
     }
