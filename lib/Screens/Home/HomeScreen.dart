@@ -28,62 +28,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _users,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(Palette.yellow),
-              ),
-            );
-          }
-          UserModel userModel = UserModel.fromDoc(snapshot.data!.docs[0]);
-          return Scaffold(
-              // appBar: MainAppBar(),
-              body: Container(
-                  child: Column(
-            children: [
-              SizedBox(height: 30),
-              //     Expanded(
-              //       child: GridView.count(
-              //         crossAxisCount: 2,
-              //         children: List.generate(
-              //             this.selectedCategory!.subCategories!.length, (index) {
-              //           return GestureDetector(
-              //             onTap: () {
-              //               var subCat = this.selectedCategory!.subCategories![index];
-              //               catSelection.selectedSubCategory = cartService
-              //                   .getCategoryFromCart(subCat as SubCategory);
-              //               Utils.mainAppNav.currentState!.pushNamed('/detailspage');
-              //             },
-              //             child: Container(
-              //                 child: Column(
-              //               children: [
-              //                 ClipOval(
-              //                   child: Image.asset(
-              //                       'assets/imgs/' +
-              //                           this
-              //                               .selectedCategory!
-              //                               .subCategories![index]
-              //                               .imgName! +
-              //                           '.png',
-              //                       fit: BoxFit.cover,
-              //                       width: 100,
-              //                       height: 100),
-              //                 ),
-              //                 SizedBox(height: 10),
-              //                 Text(this.selectedCategory!.subCategories![index].name!,
-              //                     style:
-              //                         TextStyle(color: this.selectedCategory!.color))
-              //               ],
-              //             )),
-              //           );
-              //         }),
-              //       ),
-              //     )
-            ],
-          )));
-        });
+    return Center(
+      child: ElevatedButton(
+          onPressed: () async {
+            await AuthService().logout();
+          },
+          child: Text('ログアウト')),
+    );
   }
 }
