@@ -22,7 +22,6 @@ class WelcomeScreen extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () async {
-                  await AuthService().signInAnonymous();
                   Navigator.push(
                       context,
                       CupertinoPageRoute(
