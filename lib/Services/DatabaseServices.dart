@@ -26,4 +26,18 @@ class DatabaseServices {
           (Object error) => print('Failed to set data: ${error.toString()}'),
         );
   }
+
+  static Future<void> updateUserData(UserModel user) async {
+    await usersRef.doc(currentUserId).update({
+      'name': user.name,
+      'bio': user.bio,
+      'profilePicture': user.profilePicture,
+      'coverPicture': user.coverPicture,
+      'knownAs': user.knownAs,
+      'twitterId': user.twitterId,
+      'githubId': user.githubId,
+      'instagramId': user.instagramId,
+      'uid': '',
+    });
+  }
 }

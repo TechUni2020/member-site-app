@@ -20,14 +20,14 @@ class AuthService extends ChangeNotifier {
   User? get user => _user;
   bool get loggedIn => _user != null;
 
-  Future<String> signInAnonymous() async {
+  Future<String> signInAnonymous(UserModel user) async {
     print('aaaa');
     var error = '';
     if (FirebaseAuth.instance.currentUser == null) {
       try {
-        await FirebaseAuth.instance.signInAnonymously().then((task) async => {
-              print('uid: ${task.user!.uid}'),
-            });
+        await FirebaseAuth.instance
+            .signInAnonymously()
+            .then((task) async => {await createUserData(task.user!.uid, user)});
       } on FirebaseAuthException catch (e) {
         print(e.toString());
         error = e.toString();
@@ -42,7 +42,9 @@ class AuthService extends ChangeNotifier {
   Future<void> createUserData(String id, UserModel user) async {
     final data = <String, dynamic>{
       'name': user.name,
-      'profilePicture': user.profilePicture,
+      'profilePicture': '',
+      'coverPicture': '',
+      'knownAs': user.knownAs,
       'bio': user.bio,
       'twitterId': user.twitterId,
       'githubId': user.githubId,
