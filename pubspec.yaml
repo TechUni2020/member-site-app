@@ -37,6 +37,10 @@ dependencies:
   # Image
   image_picker: ^0.8.4+6
   flutter_image_compress: ^1.1.0
+
+  # riverpod
+  flutter_hooks: ^0.18.0
+  hooks_riverpod: ^1.0.0
   
   uuid: ^3.0.5
   font_awesome_flutter: ^9.2.0

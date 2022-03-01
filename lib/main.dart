@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:techuni/Constants/Constants.dart';
-import 'package:techuni/Screens/FeedScreen.dart';
+import 'package:techuni/presentation/pages/feed_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:techuni/Screens/Welcome/WelcomeScreen.dart';
+import 'package:techuni/presentation/pages/welcome/welcome_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
